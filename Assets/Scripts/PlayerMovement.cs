@@ -30,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
     bool canSlide;
     public float slideSpeed;
     public float slideDuration;
+    float slidingDuration;
 
 
     [Header("Keybinds")]
@@ -66,6 +67,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         originScale = transform.localScale.y;
+        slidingDuration = slideDuration;
 
         readyToJump = true;
         canCrouch = true;
@@ -87,9 +89,6 @@ public class PlayerMovement : MonoBehaviour
         Slide();
 
         rb.drag = groundDrag;
-
-        Debug.Log("can crouch: " + canCrouch);
-        Debug.Log("can slide: " + canSlide);
     }
 
     void FixedUpdate()
@@ -113,7 +112,10 @@ public class PlayerMovement : MonoBehaviour
 
     void StateHandler()
     {
-        if (!grounded) { state = MovementState.air; }
+        if (!grounded) 
+        { 
+            state = MovementState.air;
+        }
 
         if (grounded && Input.GetKey(sprintKey))
         {
@@ -193,8 +195,6 @@ public class PlayerMovement : MonoBehaviour
     void Slide()
     {
         scaleDown();
-        float slidingDuration;
-        slidingDuration = slideDuration;
         if (moveSpeed > walkSpeed)
         {
             canCrouch = false;
@@ -215,6 +215,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     moveSpeed = walkSpeed;
                 }
+                slidingDuration = slideDuration;
             }
         }
     }

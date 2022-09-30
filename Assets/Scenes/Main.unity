@@ -1071,8 +1071,8 @@ MonoBehaviour:
   jumpCooldown: 0.25
   crouchScale: 0.7
   crouchSpeed: 25
-  slideSpeed: 55
-  slideDuration: 5
+  slideSpeed: 53
+  slideDuration: 1.3
   jumpKey: 32
   sprintKey: 304
   crouchKey: 306
