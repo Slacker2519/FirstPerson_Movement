@@ -18,10 +18,19 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float jumpCooldown;
     bool readyToJump;
 
+    [Header("Scaling")]
+    float originScale;
+    public float crouchScale;
+
     [Header("Crouching")]
     public float crouchSpeed;
-    public float crouchYScale;
-    float startYScale;
+    bool canCrouch;
+
+    [Header("Sliding")]
+    bool canSlide;
+    public float slideSpeed;
+    public float slideDuration;
+
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
@@ -49,18 +58,21 @@ public class PlayerMovement : MonoBehaviour
         walking,
         sprinting,
         crouching,
+        sliding,
         air
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        originScale = transform.localScale.y;
+
         readyToJump = true;
+        canCrouch = true;
+        canSlide = false;
 
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
-
-        startYScale = transform.localScale.y;
     }
 
     // Update is called once per frame
@@ -71,21 +83,19 @@ public class PlayerMovement : MonoBehaviour
         MyInput();
         SpeedControl();
         StateHandler();
+        Crouch();
+        Slide();
 
-        //if (grounded)
-        //{
-        //    rb.drag = groundDrag;
-        //}
-        //else
-        //{
-        //    rb.drag = 0;
-        //}
         rb.drag = groundDrag;
+
+        Debug.Log("can crouch: " + canCrouch);
+        Debug.Log("can slide: " + canSlide);
     }
 
     void FixedUpdate()
     {
         MovePlayer();
+        Crouch();
     }
 
     void MyInput()
@@ -99,16 +109,6 @@ public class PlayerMovement : MonoBehaviour
             Jump();
             Invoke(nameof(ResetJump), jumpCooldown);
         }
-
-        if (Input.GetKey(crouchKey) && grounded)
-        {
-            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
-            rb.AddForce(Vector3.down * 5f/*, ForceMode.Impulse*/);
-        }
-        if (Input.GetKeyUp(crouchKey))
-        {
-            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
-        }
     }
 
     void StateHandler()
@@ -120,15 +120,21 @@ public class PlayerMovement : MonoBehaviour
             state = MovementState.sprinting;
             moveSpeed = sprintSpeed;
         }
-        else if (grounded && Input.GetKey(crouchKey))
+        else if (grounded)
+        {
+            state = MovementState.walking;
+            moveSpeed = walkSpeed;
+        }
+
+        if (Input.GetKey(crouchKey) && canCrouch && !canSlide)
         {
             state = MovementState.crouching;
             moveSpeed = crouchSpeed;
         }
-        else
+        else if (Input.GetKey(crouchKey) && canSlide && !canCrouch && grounded)
         {
-            state = MovementState.walking;
-            moveSpeed = walkSpeed;
+            state = MovementState.sliding;
+            moveSpeed = slideSpeed;
         }
     }
 
@@ -159,5 +165,57 @@ public class PlayerMovement : MonoBehaviour
     void ResetJump()
     {
         readyToJump = true;
+    }
+
+    void scaleDown()
+    {
+        if (Input.GetKey(crouchKey))
+        {
+            transform.localScale = new Vector3(transform.localScale.x, crouchScale, transform.localScale.z);
+        }
+        rb.AddForce(Vector3.down * 7f);
+        if (Input.GetKeyUp(crouchKey))
+        {
+            transform.localScale = new Vector3(transform.localScale.x, originScale, transform.localScale.z);
+        }
+    }
+
+    void Crouch()
+    {
+        scaleDown();
+        if (moveSpeed <= walkSpeed)
+        {
+            canCrouch = true;
+            canSlide = false;
+        }
+    }
+
+    void Slide()
+    {
+        scaleDown();
+        float slidingDuration;
+        slidingDuration = slideDuration;
+        if (moveSpeed > walkSpeed)
+        {
+            canCrouch = false;
+            canSlide = true;
+        }
+
+        if (state == MovementState.sliding)
+        {
+            slidingDuration -= Time.deltaTime;
+            if (slidingDuration <= 0)
+            {
+                canSlide = false;
+                if (state == MovementState.crouching)
+                {
+                    moveSpeed = crouchSpeed;
+                }
+                else
+                {
+                    moveSpeed = walkSpeed;
+                }
+            }
+        }
     }
 }

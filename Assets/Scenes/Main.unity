@@ -742,7 +742,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh23582
+  m_Name: pb_Mesh23584
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1064,13 +1064,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01621b3f32c31c346888aa3f2ded1b21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 15
-  sprintSpeed: 27
+  walkSpeed: 30
+  sprintSpeed: 50
   groundDrag: 3
-  jumpForce: 5
+  jumpForce: 10
   jumpCooldown: 0.25
-  crouchSpeed: 12
-  crouchYScale: 0.6
+  crouchScale: 0.7
+  crouchSpeed: 25
+  slideSpeed: 55
+  slideDuration: 5
   jumpKey: 32
   sprintKey: 304
   crouchKey: 306
