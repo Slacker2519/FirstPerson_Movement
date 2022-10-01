@@ -1064,15 +1064,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01621b3f32c31c346888aa3f2ded1b21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 30
-  sprintSpeed: 50
+  walkSpeed: 40
+  sprintSpeed: 60
   groundDrag: 3
-  jumpForce: 10
+  jumpForce: 15
   jumpCooldown: 0.25
   crouchScale: 0.7
   crouchSpeed: 25
-  slideSpeed: 53
-  slideDuration: 1.3
+  slideSpeed: 63
+  slideDuration: 1
   jumpKey: 32
   sprintKey: 304
   crouchKey: 306

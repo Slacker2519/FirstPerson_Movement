@@ -10,28 +10,21 @@ public class PlayerMovement : MonoBehaviour
     float moveSpeed;
     public float walkSpeed;
     public float sprintSpeed;
-
+    public float crouchSpeed;
+    public float slideSpeed;
     public float groundDrag;
 
     [Header("Jumping")]
     [SerializeField] float jumpForce;
     [SerializeField] float jumpCooldown;
-    bool readyToJump;
 
     [Header("Scaling")]
     float originScale;
     public float crouchScale;
-
-    [Header("Crouching")]
-    public float crouchSpeed;
-    bool canCrouch;
-
+    
     [Header("Sliding")]
-    bool canSlide;
-    public float slideSpeed;
     public float slideDuration;
     float slidingDuration;
-
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
@@ -43,14 +36,15 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask ground;
     bool grounded;
 
-    [SerializeField] Transform orientation;
-
+    public Transform orientation;
     float horizontalInput;
     float verticalInput;
-
     Vector3 moveDirection;
-
     Rigidbody rb;
+
+    bool canJump;
+    bool canCrouch;
+    bool canSlide;
 
     MovementState state;
 
@@ -69,7 +63,7 @@ public class PlayerMovement : MonoBehaviour
         originScale = transform.localScale.y;
         slidingDuration = slideDuration;
 
-        readyToJump = true;
+        canJump = true;
         canCrouch = true;
         canSlide = false;
 
@@ -102,9 +96,9 @@ public class PlayerMovement : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetKey(jumpKey) && readyToJump == true && grounded)
+        if (Input.GetKey(jumpKey) && canJump == true && grounded)
         {
-            readyToJump = false;
+            canJump = false;
             Jump();
             Invoke(nameof(ResetJump), jumpCooldown);
         }
@@ -166,7 +160,7 @@ public class PlayerMovement : MonoBehaviour
 
     void ResetJump()
     {
-        readyToJump = true;
+        canJump = true;
     }
 
     void scaleDown()
@@ -204,19 +198,24 @@ public class PlayerMovement : MonoBehaviour
         if (state == MovementState.sliding)
         {
             slidingDuration -= Time.deltaTime;
-            if (slidingDuration <= 0)
+            ResetSlide();
+        }
+    }
+
+    private void ResetSlide()
+    {
+        if (slidingDuration <= 0)
+        {
+            canSlide = false;
+            if (state == MovementState.crouching)
             {
-                canSlide = false;
-                if (state == MovementState.crouching)
-                {
-                    moveSpeed = crouchSpeed;
-                }
-                else
-                {
-                    moveSpeed = walkSpeed;
-                }
-                slidingDuration = slideDuration;
+                moveSpeed = crouchSpeed;
             }
+            else
+            {
+                moveSpeed = walkSpeed;
+            }
+            slidingDuration = slideDuration;
         }
     }
 }
