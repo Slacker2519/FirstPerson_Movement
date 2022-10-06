@@ -1066,16 +1066,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 40
   sprintSpeed: 60
+  crouchSpeed: 25
+  slideSpeed: 63
   groundDrag: 3
   jumpForce: 15
   jumpCooldown: 0.25
   crouchScale: 0.7
-  crouchSpeed: 25
-  slideSpeed: 63
   slideDuration: 1
   jumpKey: 32
   sprintKey: 304
-  crouchKey: 306
+  crouchKey: 99
   playerHeight: 2
   ground:
     serializedVersion: 2
