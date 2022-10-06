@@ -26,10 +26,16 @@ public class PlayerMovement : MonoBehaviour
     public float slideDuration;
     float slidingDuration;
 
+    [Header("Dash")]
+    public float dashDuration;
+    public float dashCoolDown;
+    public float dashPower;
+
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
     public KeyCode sprintKey = KeyCode.LeftShift;
     public KeyCode crouchKey = KeyCode.LeftControl;
+    public KeyCode dashKey = KeyCode.Mouse0;
 
     [Header("Ground Check")]
     public float playerHeight;
@@ -45,6 +51,7 @@ public class PlayerMovement : MonoBehaviour
     bool canJump;
     bool canCrouch;
     bool canSlide;
+    bool canDash;
 
     MovementState state;
 
@@ -54,6 +61,7 @@ public class PlayerMovement : MonoBehaviour
         sprinting,
         crouching,
         sliding,
+        dashing,
         air
     }
 
@@ -66,6 +74,7 @@ public class PlayerMovement : MonoBehaviour
         canJump = true;
         canCrouch = true;
         canSlide = false;
+        canDash = true;
 
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
@@ -101,6 +110,11 @@ public class PlayerMovement : MonoBehaviour
             canJump = false;
             Jump();
             Invoke(nameof(ResetJump), jumpCooldown);
+        }
+
+        if (Input.GetKey(dashKey) && canDash)
+        {
+            StartCoroutine(Dash());
         }
     }
 
@@ -202,7 +216,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void ResetSlide()
+    void ResetSlide()
     {
         if (slidingDuration <= 0)
         {
@@ -217,5 +231,26 @@ public class PlayerMovement : MonoBehaviour
             }
             slidingDuration = slideDuration;
         }
+    }
+
+    IEnumerator Dash()
+    {
+        canDash = false;
+        state = MovementState.dashing;
+        rb.useGravity = false;
+        rb.AddForce(orientation.forward * dashPower, ForceMode.Impulse);
+        yield return new WaitForSeconds(dashDuration);
+        rb.velocity = Vector3.zero;
+        rb.useGravity = true;
+        if (grounded)
+        {
+            state = MovementState.walking;
+        } 
+        else
+        {
+            state = MovementState.air;
+        }
+        yield return new WaitForSeconds(dashCoolDown);
+        canDash = true;
     }
 }

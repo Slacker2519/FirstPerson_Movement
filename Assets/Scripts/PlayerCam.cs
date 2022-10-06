@@ -42,7 +42,7 @@ public class PlayerCam : MonoBehaviour
 
     void RotateCamera()
     {
-        if (Cursor.lockState == CursorLockMode.Locked && Cursor.visible == false)
+        //if (Cursor.lockState == CursorLockMode.Locked && Cursor.visible == false)
         {
             float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * xSen;
             float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * ySen;
