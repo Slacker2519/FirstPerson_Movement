@@ -28,21 +28,22 @@ public class PlayerCam : MonoBehaviour
 
     void CursorControl()
     {
-        if (Input.GetKey(KeyCode.LeftAlt) && Cursor.lockState == CursorLockMode.Locked && Cursor.visible == false)
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-        if (Input.GetKeyUp(KeyCode.LeftAlt) && Cursor.lockState == CursorLockMode.None && Cursor.visible == true)
+        if (Input.GetMouseButtonDown(0))
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+        }
+
+        if (Input.GetKey(KeyCode.Escape) && Cursor.lockState == CursorLockMode.Locked && Cursor.visible == false)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
     }
 
     void RotateCamera()
     {
-        //if (Cursor.lockState == CursorLockMode.Locked && Cursor.visible == false)
+        if (Cursor.lockState == CursorLockMode.Locked && Cursor.visible == false)
         {
             float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * xSen;
             float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * ySen;
