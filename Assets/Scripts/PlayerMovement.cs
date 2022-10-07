@@ -116,6 +116,7 @@ public class PlayerMovement : MonoBehaviour
         {
             StartCoroutine(Dash());
         }
+        StopCoroutine(Dash());
     }
 
     void StateHandler()
