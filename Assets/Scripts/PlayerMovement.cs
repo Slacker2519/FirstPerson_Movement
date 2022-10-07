@@ -16,7 +16,6 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Jumping")]
     [SerializeField] float jumpForce;
-    [SerializeField] float jumpCooldown;
 
     [Header("Scaling")]
     float originScale;
@@ -62,7 +61,6 @@ public class PlayerMovement : MonoBehaviour
         crouching,
         sliding,
         dashing,
-        doublejump,
         air
     }
 
@@ -86,18 +84,17 @@ public class PlayerMovement : MonoBehaviour
     {
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, ground);
 
-        MyInput();
         SpeedControl();
         StateHandler();
         Crouch();
         Slide();
-        //DoubleJump();
 
         rb.drag = groundDrag;
     }
 
     void FixedUpdate()
     {
+        MyInput();
         MovePlayer();
         Crouch();
     }
@@ -107,7 +104,7 @@ public class PlayerMovement : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetKeyDown(jumpKey) && canJump == true && grounded)
+        if (Input.GetKey(jumpKey) && canJump == true && grounded)
         {
             canJump = false;
             Jump();
@@ -238,7 +235,6 @@ public class PlayerMovement : MonoBehaviour
         rb.useGravity = false;
         rb.AddForce(orientation.forward * dashPower, ForceMode.Impulse);
         yield return new WaitForSeconds(dashDuration);
-        //rb.velocity = Vector3.zero;
         rb.useGravity = true;
         if (grounded)
         {
@@ -251,12 +247,4 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(dashCoolDown);
         canDash = true;
     }
-
-    //void DoubleJump()
-    //{
-    //    if (state == MovementState.air && canJump == false && Input.GetKey(jumpKey))
-    //    {
-    //        Jump();
-    //    }
-    //}
 }
