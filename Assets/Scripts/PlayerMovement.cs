@@ -30,11 +30,15 @@ public class PlayerMovement : MonoBehaviour
     public float dashCoolDown;
     public float dashPower;
 
+    [Header("Ground Pound")]
+    public float groundPoundForce;
+
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
     public KeyCode sprintKey = KeyCode.LeftShift;
     public KeyCode crouchKey = KeyCode.LeftControl;
     public KeyCode dashKey = KeyCode.Mouse0;
+    public KeyCode groundPoundKey = KeyCode.LeftControl;
 
     [Header("Ground Check")]
     public float playerHeight;
@@ -61,6 +65,7 @@ public class PlayerMovement : MonoBehaviour
         crouching,
         sliding,
         dashing,
+        groundpounding,
         air
     }
 
@@ -116,6 +121,11 @@ public class PlayerMovement : MonoBehaviour
             StartCoroutine(Dash());
         }
         StopCoroutine(Dash());
+
+        if (Input.GetKey(groundPoundKey))
+        {
+            GroundPound();
+        }
     }
 
     void StateHandler()
@@ -145,6 +155,11 @@ public class PlayerMovement : MonoBehaviour
         {
             state = MovementState.sliding;
             moveSpeed = slideSpeed;
+        }
+
+        if (Input.GetKeyDown(groundPoundKey))
+        {
+            state = MovementState.groundpounding;
         }
     }
 
@@ -246,5 +261,11 @@ public class PlayerMovement : MonoBehaviour
         }
         yield return new WaitForSeconds(dashCoolDown);
         canDash = true;
+    }
+
+    void GroundPound()
+    {
+        rb.velocity = Vector3.zero;
+        rb.AddForce(Vector3.down * groundPoundForce, ForceMode.Force);
     }
 }

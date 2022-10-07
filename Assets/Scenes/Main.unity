@@ -1086,7 +1086,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh23580
+  m_Name: pb_Mesh23594
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1350,7 +1350,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-18420
+  m_Name: pb_Mesh23568
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1583,10 +1583,12 @@ MonoBehaviour:
   dashDuration: 0.3
   dashCoolDown: 3
   dashPower: 65
+  groundPoundForce: 2000
   jumpKey: 32
   sprintKey: 304
   crouchKey: 99
   dashKey: 323
+  groundPoundKey: 306
   playerHeight: 2
   ground:
     serializedVersion: 2
