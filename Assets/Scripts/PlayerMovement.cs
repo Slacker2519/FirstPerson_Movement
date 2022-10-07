@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
     public float slideDuration;
     float slidingDuration;
 
-    [Header("Dash")]
+    [Header("Dashing")]
     public float dashDuration;
     public float dashCoolDown;
     public float dashPower;
@@ -62,6 +62,7 @@ public class PlayerMovement : MonoBehaviour
         crouching,
         sliding,
         dashing,
+        doublejump,
         air
     }
 
@@ -90,6 +91,7 @@ public class PlayerMovement : MonoBehaviour
         StateHandler();
         Crouch();
         Slide();
+        //DoubleJump();
 
         rb.drag = groundDrag;
     }
@@ -105,14 +107,14 @@ public class PlayerMovement : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetKey(jumpKey) && canJump == true && grounded)
+        if (Input.GetKeyDown(jumpKey) && canJump == true && grounded)
         {
             canJump = false;
             Jump();
-            Invoke(nameof(ResetJump), jumpCooldown);
+            canJump = true;
         }
 
-        if (Input.GetKey(dashKey) && canDash)
+        if (Input.GetKeyDown(dashKey) && canDash)
         {
             StartCoroutine(Dash());
         }
@@ -142,7 +144,7 @@ public class PlayerMovement : MonoBehaviour
             state = MovementState.crouching;
             moveSpeed = crouchSpeed;
         }
-        else if (Input.GetKey(crouchKey) && canSlide && !canCrouch && grounded)
+        else if (Input.GetKey(crouchKey) && canSlide && !canCrouch && grounded || canDash == false)
         {
             state = MovementState.sliding;
             moveSpeed = slideSpeed;
@@ -171,11 +173,6 @@ public class PlayerMovement : MonoBehaviour
     {
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
-    }
-
-    void ResetJump()
-    {
-        canJump = true;
     }
 
     void scaleDown()
@@ -241,7 +238,7 @@ public class PlayerMovement : MonoBehaviour
         rb.useGravity = false;
         rb.AddForce(orientation.forward * dashPower, ForceMode.Impulse);
         yield return new WaitForSeconds(dashDuration);
-        rb.velocity = Vector3.zero;
+        //rb.velocity = Vector3.zero;
         rb.useGravity = true;
         if (grounded)
         {
@@ -254,4 +251,12 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(dashCoolDown);
         canDash = true;
     }
+
+    //void DoubleJump()
+    //{
+    //    if (state == MovementState.air && canJump == false && Input.GetKey(jumpKey))
+    //    {
+    //        Jump();
+    //    }
+    //}
 }

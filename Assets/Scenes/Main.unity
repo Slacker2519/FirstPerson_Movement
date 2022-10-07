@@ -1075,7 +1075,7 @@ MonoBehaviour:
   slideDuration: 1
   dashDuration: 0.3
   dashCoolDown: 3
-  dashPower: 70
+  dashPower: 65
   jumpKey: 32
   sprintKey: 304
   crouchKey: 99
