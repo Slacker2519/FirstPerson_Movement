@@ -93,13 +93,13 @@ public class PlayerMovement : MonoBehaviour
         StateHandler();
         Crouch();
         Slide();
+        MyInput();
 
         rb.drag = groundDrag;
     }
 
     void FixedUpdate()
     {
-        MyInput();
         MovePlayer();
         Crouch();
     }
