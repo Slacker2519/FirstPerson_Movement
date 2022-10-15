@@ -101,7 +101,6 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         MovePlayer();
-        Crouch();
     }
 
     void MyInput()

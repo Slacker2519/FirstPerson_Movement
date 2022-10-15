@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class PlayerCam : MonoBehaviour
 {
-    [SerializeField] float xSen;
-    [SerializeField] float ySen;
+    [SerializeField] float _xSen;
+    [SerializeField] float _ySen;
 
-    [SerializeField] Transform orientation;
+    [SerializeField] Transform _orientation;
 
-    float xRotation;
-    float yRotation;
+    float _xRotation;
+    float _yRotation;
 
     // Start is called before the first frame update
     void Start()
@@ -45,15 +45,15 @@ public class PlayerCam : MonoBehaviour
     {
         if (Cursor.lockState == CursorLockMode.Locked && Cursor.visible == false)
         {
-            float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * xSen;
-            float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * ySen;
+            float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * _xSen;
+            float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * _ySen;
 
-            yRotation += mouseX;
-            xRotation -= mouseY;
-            xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+            _yRotation += mouseX;
+            _xRotation -= mouseY;
+            _xRotation = Mathf.Clamp(_xRotation, -90f, 90f);
 
-            transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-            orientation.rotation = Quaternion.Euler(0, yRotation, 0);
+            transform.rotation = Quaternion.Euler(_xRotation, _yRotation, 0);
+            _orientation.rotation = Quaternion.Euler(0, _yRotation, 0);
         }
     }
 }
